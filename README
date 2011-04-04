@@ -1,0 +1,23 @@
+tempo2_plugins
+P. Demorest, NRAO
+
+This is a collection of plugins for the TEMPO2 pulsar timing software
+package.  If all your environment variables are set up correctly,
+installation should be as simple as 'make && make install'.  This may
+transition to something more complex (like autotools) at some point.
+
+The current plugins here are:
+
+mcmc_plug - This plugin runs a Markov chain Monte Carlo (MCMC) version
+of the timing fit.  It was originally developed to characterize Shapriro
+delay in J1614-2230 (Demorest et al. 2010).  The chain is output is to a
+fits table that can then be read and analyzed with for example
+python/pyfits as appropriate.
+
+grid_plug - This one calculates a chi2 grid for a specified range of the
+M2 and SINI Shapiro delay parameters.  At each grid point, M2 and SINI
+are held fixed and any other flagged parameters are fit for.
+
+resid_plug - This outputs residuals and some other useful info in a
+simple ASCII format (same as 'print_resid').
+
