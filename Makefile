@@ -12,6 +12,9 @@ TEMPO2_SRC = /data1/demorest/src/tempo2
 # Include dirs, etc
 CXXFLAGS = -O3 -I $(TEMPO2)/include -I $(TEMPO2_SRC)
 
+# Options for shared lib
+LDFLAGS = -fPIC -shared
+
 # Extra libraries
 LIBS = -L $(TEMPO2)/lib -ltempo2 -lcfitsio -lm 
 
@@ -30,5 +33,5 @@ clean:
 	rm -f $(PLUGIN_LIBS)
 
 %_$(ARCH)_plug.t2: %_plug.C
-	$(CXX) $(CXXFLAGS) -fPIC -shared -o $@ $< $(LIBS)
+	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $@ $< $(LIBS)
 
