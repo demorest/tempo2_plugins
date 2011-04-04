@@ -40,7 +40,7 @@ extern "C" int graphicalInterface(int argc, char *argv[],
     // Parse command line.. there has to be a better way to do this..
     double m2_min = 0.0, m2_max = 2.0;
     double sini_min = 0.5, sini_max = 1.0;
-    int m2_steps = 128, sini_steps = 128, mtot_steps = 128;
+    int m2_steps = 128, sini_steps = 128;
     for (unsigned i=1; i<argc; i++) {
         if (strcmp(argv[i], "-f")==0) {
             strcpy(parFile[0], argv[i+1]);
@@ -90,17 +90,15 @@ extern "C" int graphicalInterface(int argc, char *argv[],
     printf("# initial chi2=%.5e\n", init_chi2);
 
     // step size, etc
-    double mtot_min = 0.0, mtot_max = 3.0;
     double delta_m2 = (m2_max - m2_min)/(double)m2_steps;
     double delta_sini = (sini_max - sini_min)/(double)sini_steps;
-    double delta_mtot = (mtot_max - mtot_min)/(double)mtot_steps;
 
     // Store current parameters in psr[1], trial params in psr[0]
     store_params(psr);
 
     // Main iteration loop
     signal(SIGINT, cc);
-    double cur_m2, cur_sini, cur_mtot, cur_chi2;
+    double cur_m2, cur_sini, cur_chi2;
     for (cur_sini=sini_min; cur_sini<sini_max; cur_sini+=delta_sini) {
         for (cur_m2=m2_min; cur_m2<m2_max; cur_m2+=delta_m2) {
 
