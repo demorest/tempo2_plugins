@@ -9,7 +9,7 @@ transition to something more complex (like autotools) at some point.
 The current plugins here are:
 
 mcmc_plug - This plugin runs a Markov chain Monte Carlo (MCMC) version
-of the timing fit.  It was originally developed to characterize Shapriro
+of the timing fit.  It was originally developed to characterize Shapiro
 delay in J1614-2230 (Demorest et al. 2010).  The chain is output is to a
 fits table that can then be read and analyzed with for example
 python/pyfits as appropriate.
