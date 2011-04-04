@@ -15,7 +15,7 @@ CXXFLAGS = -O3 -I $(TEMPO2)/include -I $(TEMPO2_SRC)
 # Extra libraries
 LIBS = -L $(TEMPO2)/lib -ltempo2 -lcfitsio -lm 
 
-# Base name of all plugins
+# Base name of all plugins to be compiled
 PLUGINS = mcmc grid
 
 PLUGIN_SRCS = $(addsuffix _plug.C, $(PLUGINS))
