@@ -87,7 +87,6 @@ extern "C" int graphicalInterface(int argc, char *argv[],
 
     // Get initial chi2, etc.
     double init_chi2 = psr_chi2(psr);
-    printf("# initial chi2=%.5e\n", init_chi2);
 
     // step size, etc
     double delta_m2 = (m2_max - m2_min)/(double)m2_steps;
@@ -95,6 +94,10 @@ extern "C" int graphicalInterface(int argc, char *argv[],
 
     // Store current parameters in psr[1], trial params in psr[0]
     store_params(psr);
+
+    // Print header lines
+    printf("# chi2_0=%.5e\n", init_chi2);
+    printf("# SINI M2 chi2-chi2_0\n");
 
     // Main iteration loop
     signal(SIGINT, cc);
@@ -134,7 +137,7 @@ extern "C" int graphicalInterface(int argc, char *argv[],
                 cur_chi2 = 1e6;
             }
 
-            printf("%.9f %.5f %.6e\n", cur_sini, cur_m2, cur_chi2);
+            printf("%.9f %.5f %.10e\n", cur_sini, cur_m2, cur_chi2-init_chi2);
 
             if (run==0) break;
         }
