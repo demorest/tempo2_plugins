@@ -7,7 +7,7 @@ ARCH = $(shell uname | tr A-Z a-z)
 
 # This is the path to your copy of the tempo2 source.
 # Note, in general different from your $TEMPO2 directory.
-TEMPO2_SRC = /data1/demorest/src/tempo2
+TEMPO2_SRC = /usr/local/src/tempo2
 
 # Include dirs, etc
 CXXFLAGS = -O3 -I $(TEMPO2)/include -I $(TEMPO2_SRC)
