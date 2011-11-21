@@ -59,6 +59,7 @@ struct mcmc_output_file {
     int *map_t;
     int *map_j;
     int status;
+    double *param_offset;
 };
 void init_mcmc_output(struct mcmc_output_file *f, const char *fname, 
         int npar, int *map_p, int *map_t, 
@@ -498,6 +499,10 @@ void init_mcmc_output(struct mcmc_output_file *f, const char *fname,
     f->map_t = map_t;
     f->map_j = map_j;
 
+    // Table of offsets to the parameters to work around lack
+    // of full precision in the MCMC output.
+    f->param_offset = (double *)malloc(sizeof(double) * f->nmodel);
+
     // Main output is a fits table
     fits_create_tbl(f->fptr, BINARY_TBL, 0, 0, NULL, NULL, NULL, "MCMC", s);
 
@@ -507,6 +512,14 @@ void init_mcmc_output(struct mcmc_output_file *f, const char *fname,
         parameter *pp = &(p->param[map_p[i]]);
         ncol++;
         fits_insert_col(f->fptr, ncol, pp->shortlabel[map_t[i]], "D", s);
+        // Only offset F0 for now..
+        if (strcmp(pp->shortlabel[map_t[i]],"F0")==0) {
+            double val = pp->val[map_t[i]];
+            f->param_offset[i] = val;
+            fits_update_key_dbl(f->fptr, "F0", val, 17, NULL, s);
+        } else {
+            f->param_offset[i] = 0.0;
+        }
     }
     for (unsigned i=0; i<njump; i++) {
         ncol++;
@@ -528,7 +541,7 @@ void mcmc_output(struct mcmc_output_file *f, pulsar *p, double chi2) {
     fits_insert_rows(f->fptr, nrow, 1, &f->status);
     for (unsigned i=0; i<f->nmodel; i++) {
         parameter *pp = &(p->param[f->map_p[i]]);
-        double val = pp->val[f->map_t[i]];
+        double val = pp->val[f->map_t[i]] - (long double)f->param_offset[i];
         fits_write_col(f->fptr, TDOUBLE, i+1, nrow+1, 
                 1, 1, &val, &f->status);
     }
