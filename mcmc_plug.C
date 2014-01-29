@@ -15,12 +15,15 @@
 #include "tempo2.h"
 #include "T2toolkit.h"
 #include "TKfit.h"
+#include "choleskyRoutines.h"
 
 static int run=1;
 void cc(int sig) { run=0; }
 
+#if 0 
 void TKsingularValueDecomposition_lsq(double **A, int n, int nf,
         double **v,double *w,double **u);
+#endif
 
 double psr_chi2(pulsar *p);
 double psr_logL(pulsar *p);
@@ -432,6 +435,18 @@ void multi_gauss_rand(int n, double **cov, double *x) {
             }
         }
 
+        // Use T2cholDecomposition for matrix sqrt
+        T2cholDecomposition(A, n, tmp);
+        // Fill in the diagonal elements:
+        for (i=0; i<n; i++) { A[i][i] = tmp[i]; }
+        // Zero out the top half:
+        for (i=0; i<n; i++) {
+            for (j=i+1; j<n; j++) {
+                A[i][j] = 0.0;
+            }
+        }
+
+#if 0  // Old SVD-based version
         // Use SVD to get the matrix sqrt..
         double **v = matrix_malloc(n);
         double **u = matrix_malloc(n);
@@ -457,6 +472,7 @@ void multi_gauss_rand(int n, double **cov, double *x) {
         matrix_free(n,v);
         matrix_free(n,u);
         free(w);
+#endif
 
         seed = TKsetSeed();
     }
